@@ -149,7 +149,69 @@ const verifyToken = async (req, res) => {
     }
 };
 
+// POST /api/auth/login
+const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Validación básica de entrada
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email y contraseña son requeridos'
+            });
+        }
+
+        // Buscar usuario por email
+        const user = await User.findByEmail(email);
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciales inválidas'
+            });
+        }
+
+        // Verificar si la cuenta está activa
+        if (!user.isActive) {
+            return res.status(401).json({
+                success: false,
+                message: 'Cuenta desactivada'
+            });
+        }
+
+        // Verificar contraseña
+        const isPasswordValid = await user.comparePassword(password);
+        if (!isPasswordValid) {
+            return res.status(401).json({
+                success: false,
+                message: 'Credenciales inválidas'
+            });
+        }
+
+        // Generar token JWT
+        const token = generateToken(user._id);
+
+        // Respuesta exitosa
+        res.status(200).json({
+            success: true,
+            message: 'Inicio de sesión exitoso',
+            data: {
+                user: user.toJSON(),
+                token
+            }
+        });
+
+    } catch (error) {
+        console.error('Error en login:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+};
+
 module.exports = {
     register,
+    login,
     verifyToken
 };

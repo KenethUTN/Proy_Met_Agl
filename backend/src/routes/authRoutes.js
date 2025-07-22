@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, verifyToken } = require('../controllers/authController');
+const { register, login, verifyToken } = require('../controllers/authController');
 
 // Crear router de Express
 const router = express.Router();
@@ -17,6 +17,15 @@ router.post('/register', register);
  * @desc    Iniciar sesión de usuario
  * @access  Público
  * @body    { email: string, password: string }
+ */
+
+router.post('/login', login);
+
+/**
+ * @route   GET /api/auth/verify
+ * @desc    Verificar token JWT válido
+ * @access  Privado (requiere token)
+ * @header  Authorization: Bearer <token>
  */
 
 router.get('/verify', verifyToken);
