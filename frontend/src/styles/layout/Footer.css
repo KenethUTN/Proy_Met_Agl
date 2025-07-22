@@ -1,0 +1,216 @@
+/* Estilos para el Footer */
+
+.footer {
+  background: linear-gradient(135deg, var(--federal-blue) 0%, var(--marian-blue) 100%);
+  color: var(--white);
+  margin-top: auto;
+  padding: 40px 0 20px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--pacific-cyan), var(--vivid-sky-blue), var(--pacific-cyan));
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Logo y descripción */
+.footer-logo {
+  color: var(--white);
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.footer-description {
+  color: var(--light-cyan);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 250px;
+}
+
+/* Títulos de sección */
+.footer-title {
+  color: var(--vivid-sky-blue);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  position: relative;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--pacific-cyan);
+  border-radius: 2px;
+}
+
+/* Grid del equipo */
+.team-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.team-member {
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid var(--pacific-cyan);
+  transition: all 0.3s ease;
+}
+
+.team-member:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.member-name {
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Información del proyecto */
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.project-info p {
+  color: var(--light-cyan);
+  font-size: 14px;
+  margin: 0;
+  padding: 4px 0;
+}
+
+/* Footer bottom */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-top: 20px;
+  text-align: center;
+}
+
+.copyright {
+  color: var(--light-cyan);
+  font-size: 12px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer {
+    padding: 30px 0 15px 0;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-size: 24px;
+  }
+
+  .footer-description {
+    max-width: 100%;
+  }
+
+  .footer-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .team-member:hover {
+    transform: translateY(-2px);
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 0 15px;
+  }
+
+  .footer-content {
+    gap: 25px;
+  }
+
+  .footer-logo {
+    font-size: 20px;
+  }
+
+  .footer-title {
+    font-size: 16px;
+  }
+
+  .member-name {
+    font-size: 13px;
+  }
+
+  .copyright {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+}
+
+/* Animaciones sutiles */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-section {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.footer-section:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.footer-section:nth-child(3) {
+  animation-delay: 0.2s;
+}
