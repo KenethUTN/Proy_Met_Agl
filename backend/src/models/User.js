@@ -89,7 +89,6 @@ userSchema.statics.emailExists = async function(email) {
 };
 
 // Crear índices para optimizar consultas
-userSchema.index({ email: 1 });
 userSchema.index({ createdAt: -1 });
 
 // Crear el modelo

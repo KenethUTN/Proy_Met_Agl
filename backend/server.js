@@ -8,6 +8,7 @@ const startServer = async () => {
         await connectDB();
         
         // Crear la aplicación Express
+        console.log('DEBUG: Llamando a createApp() en server.js');
         const app = createApp();
         
         // Configurar el puerto

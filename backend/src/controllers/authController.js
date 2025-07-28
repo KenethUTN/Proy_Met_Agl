@@ -16,7 +16,10 @@ const generateToken = (userId) => {
     );
 };
 
-// POST /api/auth/register
+/**
+ * Controlador de registro de usuarios
+ * POST /api/auth/register
+ */
 const register = async (req, res) => {
     try {
         const { email, password, name } = req.body;
@@ -90,66 +93,10 @@ const register = async (req, res) => {
     }
 };
 
-
-
-// GET /api/auth/verify
-const verifyToken = async (req, res) => {
-    try {
-        const token = req.headers.authorization?.replace('Bearer ', '');
-
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: 'Token no proporcionado'
-            });
-        }
-
-        // Verificar y decodificar token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
-        // Buscar usuario
-        const user = await User.findById(decoded.userId);
-        if (!user || !user.isActive) {
-            return res.status(401).json({
-                success: false,
-                message: 'Token inválido'
-            });
-        }
-
-        // Respuesta exitosa
-        res.status(200).json({
-            success: true,
-            message: 'Token válido',
-            data: {
-                user: user.toJSON()
-            }
-        });
-
-    } catch (error) {
-        console.error('Error verificando token:', error);
-        
-        if (error.name === 'JsonWebTokenError') {
-            return res.status(401).json({
-                success: false,
-                message: 'Token inválido'
-            });
-        }
-        
-        if (error.name === 'TokenExpiredError') {
-            return res.status(401).json({
-                success: false,
-                message: 'Token expirado'
-            });
-        }
-
-        res.status(500).json({
-            success: false,
-            message: 'Error interno del servidor'
-        });
-    }
-};
-
-// POST /api/auth/login
+/**
+ * Controlador de inicio de sesión
+ * POST /api/auth/login
+ */
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -203,6 +150,66 @@ const login = async (req, res) => {
 
     } catch (error) {
         console.error('Error en login:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error interno del servidor'
+        });
+    }
+};
+
+/**
+ * Controlador para verificar token JWT
+ * GET /api/auth/verify
+ */
+const verifyToken = async (req, res) => {
+    try {
+        const token = req.headers.authorization?.replace('Bearer ', '');
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Token no proporcionado'
+            });
+        }
+
+        // Verificar y decodificar token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Buscar usuario
+        const user = await User.findById(decoded.userId);
+        if (!user || !user.isActive) {
+            return res.status(401).json({
+                success: false,
+                message: 'Token inválido'
+            });
+        }
+
+        // Respuesta exitosa
+        res.status(200).json({
+            success: true,
+            message: 'Token válido',
+            data: {
+                user: user.toJSON()
+            }
+        });
+
+    } catch (error) {
+        console.error('Error verificando token:', error);
+        
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({
+                success: false,
+                message: 'Token inválido'
+            });
+        }
+        
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({
+                success: false,
+                message: 'Token expirado'
+            });
+        }
+
         res.status(500).json({
             success: false,
             message: 'Error interno del servidor'

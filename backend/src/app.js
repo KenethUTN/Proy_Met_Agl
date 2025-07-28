@@ -3,9 +3,13 @@ const cors = require('cors');
 
 // Importar rutas
 const authRoutes = require('./routes/authRoutes');
+console.log('DEBUG: authRoutes =', authRoutes);
+const taskRoutes = require('./routes/taskRoutes');
+console.log('DEBUG: taskRoutes =', taskRoutes);
 
 // Configuración principal de la aplicación Express
 const createApp = () => {
+    console.log('DEBUG: Entrando a createApp()');
     const app = express();
 
     // Configuración de CORS
@@ -38,6 +42,7 @@ const createApp = () => {
 
     // Configuración de rutas de la API
     app.use('/api/auth', authRoutes);
+    app.use('/api/tasks', taskRoutes);
 
     // Middleware de manejo de rutas no encontradas
     app.use('*', (req, res) => {
