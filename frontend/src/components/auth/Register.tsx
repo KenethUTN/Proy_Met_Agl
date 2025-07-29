@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
+import '../../styles/auth/Register.css'
+import '../../styles/auth/Background.css'
 
 const Register = () => {
   const [name, setName] = useState('')
@@ -28,54 +30,46 @@ const Register = () => {
 
     setIsLoading(true)
 
-    const success = await register(name, email, password)
-    
-    if (success) {
-      navigate('/')
-    } else {
-      setError('Error al crear la cuenta')
+    try {
+      const success = await register(name, email, password)
+      
+      if (success) {
+        navigate('/')
+      } else {
+        setError('Error al crear la cuenta. Es posible que el email ya esté registrado.')
+      }
+    } catch (error) {
+      setError('Error de conexión. Por favor, inténtalo de nuevo.')
     }
+    
     setIsLoading(false)
   }
 
   return (
-    <div style={{ 
-      maxWidth: '400px', 
-      margin: '100px auto', 
-      padding: '20px',
-      backgroundColor: 'var(--white)',
-      borderRadius: '10px',
-      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-    }}>
-      <h2 style={{ 
-        textAlign: 'center', 
-        color: 'var(--marian-blue)',
-        marginBottom: '30px'
-      }}>
-        Crear Cuenta
-      </h2>
+    <div style={{ minHeight: '100vh', position: 'relative' }}>
+      {/* Background simple que SÍ funciona */}
+      <div className="auth-background"></div>
+      <div className="wave-container">
+        <div className="wave"></div>
+        <div className="wave"></div>
+        <div className="wave"></div>
+      </div>
       
-      {error && (
-        <div style={{ 
-          color: 'red', 
-          textAlign: 'center', 
-          marginBottom: '20px',
-          padding: '10px',
-          backgroundColor: '#ffeaea',
-          borderRadius: '5px'
-        }}>
-          {error}
-        </div>
-      )}
+      {/* Contenedor del formulario */}
+      <div className="register-container">
+        <h2 className="register-title">
+          Crear Cuenta
+        </h2>
+        
+        {error && (
+          <div className="register-error">
+            {error}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px',
-            color: 'var(--marian-blue)',
-            fontWeight: '500'
-          }}>
+        <form onSubmit={handleSubmit}>
+        <div className="register-field">
+          <label className="register-label">
             Nombre:
           </label>
           <input
@@ -83,24 +77,13 @@ const Register = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '2px solid var(--light-cyan)',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxSizing: 'border-box'
-            }}
+            className="register-input"
+            placeholder="Tu nombre completo"
           />
         </div>
 
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px',
-            color: 'var(--marian-blue)',
-            fontWeight: '500'
-          }}>
+        <div className="register-field">
+          <label className="register-label">
             Email:
           </label>
           <input
@@ -108,24 +91,13 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '2px solid var(--light-cyan)',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxSizing: 'border-box'
-            }}
+            className="register-input"
+            placeholder="tu@email.com"
           />
         </div>
         
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px',
-            color: 'var(--marian-blue)',
-            fontWeight: '500'
-          }}>
+        <div className="register-field">
+          <label className="register-label">
             Contraseña:
           </label>
           <input
@@ -133,24 +105,13 @@ const Register = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '2px solid var(--light-cyan)',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxSizing: 'border-box'
-            }}
+            className="register-input"
+            placeholder="Mínimo 6 caracteres"
           />
         </div>
 
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px',
-            color: 'var(--marian-blue)',
-            fontWeight: '500'
-          }}>
+        <div className="register-field">
+          <label className="register-label">
             Confirmar Contraseña:
           </label>
           <input
@@ -158,54 +119,30 @@ const Register = () => {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '2px solid var(--light-cyan)',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxSizing: 'border-box'
-            }}
+            className="register-input"
+            placeholder="Repite tu contraseña"
           />
         </div>
         
         <button
           type="submit"
           disabled={isLoading}
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: 'var(--pacific-cyan)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: isLoading ? 'not-allowed' : 'pointer',
-            transition: 'background-color 0.3s ease'
-          }}
+          className="register-button"
         >
           {isLoading ? 'Creando cuenta...' : 'Crear Cuenta'}
         </button>
       </form>
 
-      <p style={{ 
-        textAlign: 'center', 
-        marginTop: '20px',
-        color: 'var(--marian-blue)'
-      }}>
+      <p className="register-footer">
         ¿Ya tienes cuenta?{' '}
         <Link 
           to="/login" 
-          style={{ 
-            color: 'var(--pacific-cyan)',
-            textDecoration: 'none',
-            fontWeight: '600'
-          }}
+          className="register-link"
         >
           Inicia sesión aquí
         </Link>
       </p>
+    </div>
     </div>
   )
 }

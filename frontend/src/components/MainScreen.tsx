@@ -1,12 +1,13 @@
 import React from 'react'
-import { textChangeRangeIsUnchanged } from 'typescript'
+import { useAuth } from '../context/AuthContext'
+import Dashboard from './Dashboard'
+import LandingPage from './LandingPage'
 
 const MainScreen = () => {
-  return (
-    <div style={{ textAlign: 'center', marginTop: '200px', marginBottom: '200px' }}>
-      esperando que hagan el mock up de la main page :v
-    </div>
-  )
+  const { user } = useAuth()
+
+  // Decidir qué componente mostrar basado en la autenticación
+  return user ? <Dashboard /> : <LandingPage />
 }
 
 export default MainScreen

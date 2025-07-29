@@ -4,8 +4,8 @@ import '../styles/layout/Footer.css'
 
 const Footer = () => {
   const teamMembers = [
-    'Kevin Córdoba Rivera',
-    'Edú Ramírez Campos',
+    'Kevin Córdoba Rivera (Frontend)',
+    'Edú Ramírez Campos (Backend)',
     'Karina Selles Obando',
     'Keneth González Castillo',
     'Sebastián Peraza Desanti',

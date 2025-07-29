@@ -1,9 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { authAPI } from '../utils/api'
 
 interface User {
-  id: string
+  _id: string
   name: string
   email: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
 }
 
 interface AuthContextType {
@@ -33,30 +37,53 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Verificar si hay un usuario guardado en localStorage
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    // Verificar si hay un token y usuario en localStorage
+    const checkAuth = async () => {
+      const savedToken = localStorage.getItem('token')
+      const savedUser = localStorage.getItem('user')
+      
+      if (savedToken && savedUser) {
+        try {
+          // Verificar si el token sigue siendo válido
+          const data = await authAPI.verify()
+          if (data.success) {
+            setUser(data.data.user)
+          } else {
+            // Token inválido, limpiar localStorage
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
+          }
+        } catch (error) {
+          console.error('Error verificando autenticación:', error)
+          localStorage.removeItem('token')
+          localStorage.removeItem('user')
+        }
+      }
+      setIsLoading(false)
     }
-    setIsLoading(false)
+
+    checkAuth()
   }, [])
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true)
     try {
-      // Aquí irá la lógica real de autenticación con el backend
-      // Por ahora simulo una autenticación exitosa
-      const mockUser: User = {
-        id: '1',
-        name: email.split('@')[0], // Usar la parte antes del @ como nombre
-        email: email
+      const data = await authAPI.login(email, password)
+
+      if (data.success) {
+        const { user, token } = data.data
+        setUser(user)
+        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('token', token)
+        setIsLoading(false)
+        return true
+      } else {
+        console.error('Error en login:', data.message)
+        setIsLoading(false)
+        return false
       }
-      
-      setUser(mockUser)
-      localStorage.setItem('user', JSON.stringify(mockUser))
-      setIsLoading(false)
-      return true
     } catch (error) {
+      console.error('Error en login:', error)
       setIsLoading(false)
       return false
     }
@@ -65,19 +92,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     setIsLoading(true)
     try {
-      // Aquí irá la lógica real de registro con el backend
-      // Por ahora simulo un registro exitoso
-      const mockUser: User = {
-        id: '1',
-        name: name,
-        email: email
+      const data = await authAPI.register(name, email, password)
+
+      if (data.success) {
+        const { user, token } = data.data
+        setUser(user)
+        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('token', token)
+        setIsLoading(false)
+        return true
+      } else {
+        console.error('Error en registro:', data.message)
+        setIsLoading(false)
+        return false
       }
-      
-      setUser(mockUser)
-      localStorage.setItem('user', JSON.stringify(mockUser))
-      setIsLoading(false)
-      return true
     } catch (error) {
+      console.error('Error en registro:', error)
       setIsLoading(false)
       return false
     }
@@ -86,6 +116,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null)
     localStorage.removeItem('user')
+    localStorage.removeItem('token')
   }
 
   const value: AuthContextType = {

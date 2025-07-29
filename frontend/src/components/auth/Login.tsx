@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate, Link } from 'react-router-dom'
+import '../../styles/auth/Login.css'
+import '../../styles/auth/Background.css'
 
 const Login = () => {
   const [email, setEmail] = useState('')
@@ -15,54 +17,46 @@ const Login = () => {
     setError('')
     setIsLoading(true)
 
-    const success = await login(email, password)
-    
-    if (success) {
-      navigate('/')
-    } else {
-      setError('Credenciales inválidas')
+    try {
+      const success = await login(email, password)
+      
+      if (success) {
+        navigate('/')
+      } else {
+        setError('Email o contraseña incorrectos. Por favor, verifica tus credenciales.')
+      }
+    } catch (error) {
+      setError('Error de conexión. Por favor, inténtalo de nuevo.')
     }
+    
     setIsLoading(false)
   }
 
   return (
-    <div style={{ 
-      maxWidth: '400px', 
-      margin: '100px auto', 
-      padding: '20px',
-      backgroundColor: 'var(--white)',
-      borderRadius: '10px',
-      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
-    }}>
-      <h2 style={{ 
-        textAlign: 'center', 
-        color: 'var(--marian-blue)',
-        marginBottom: '30px'
-      }}>
-        Iniciar Sesión
-      </h2>
+    <div style={{ minHeight: '100vh', position: 'relative' }}>
+      {/* Background simple que SÍ funciona */}
+      <div className="auth-background"></div>
+      <div className="wave-container">
+        <div className="wave"></div>
+        <div className="wave"></div>
+        <div className="wave"></div>
+      </div>
       
-      {error && (
-        <div style={{ 
-          color: 'red', 
-          textAlign: 'center', 
-          marginBottom: '20px',
-          padding: '10px',
-          backgroundColor: '#ffeaea',
-          borderRadius: '5px'
-        }}>
-          {error}
-        </div>
-      )}
+      {/* Contenedor del formulario */}
+      <div className="login-container">
+        <h2 className="login-title">
+          Iniciar Sesión
+        </h2>
+        
+        {error && (
+          <div className="login-error">
+            {error}
+          </div>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px',
-            color: 'var(--marian-blue)',
-            fontWeight: '500'
-          }}>
+        <form onSubmit={handleSubmit}>
+        <div className="login-field">
+          <label className="login-label">
             Email:
           </label>
           <input
@@ -70,24 +64,13 @@ const Login = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '2px solid var(--light-cyan)',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxSizing: 'border-box'
-            }}
+            className="login-input"
+            placeholder="tu@email.com"
           />
         </div>
         
-        <div style={{ marginBottom: '20px' }}>
-          <label style={{ 
-            display: 'block', 
-            marginBottom: '5px',
-            color: 'var(--marian-blue)',
-            fontWeight: '500'
-          }}>
+        <div className="login-field">
+          <label className="login-label">
             Contraseña:
           </label>
           <input
@@ -95,54 +78,30 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={{
-              width: '100%',
-              padding: '12px',
-              border: '2px solid var(--light-cyan)',
-              borderRadius: '5px',
-              fontSize: '16px',
-              boxSizing: 'border-box'
-            }}
+            className="login-input"
+            placeholder="••••••••"
           />
         </div>
         
         <button
           type="submit"
           disabled={isLoading}
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: 'var(--pacific-cyan)',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: isLoading ? 'not-allowed' : 'pointer',
-            transition: 'background-color 0.3s ease'
-          }}
+          className="login-button"
         >
           {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
         </button>
       </form>
 
-      <p style={{ 
-        textAlign: 'center', 
-        marginTop: '20px',
-        color: 'var(--marian-blue)'
-      }}>
+      <p className="login-footer">
         ¿No tienes cuenta?{' '}
         <Link 
           to="/register" 
-          style={{ 
-            color: 'var(--pacific-cyan)',
-            textDecoration: 'none',
-            fontWeight: '600'
-          }}
+          className="login-link"
         >
           Regístrate aquí
         </Link>
       </p>
+    </div>
     </div>
   )
 }

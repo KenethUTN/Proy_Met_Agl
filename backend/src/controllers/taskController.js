@@ -3,16 +3,27 @@ const Task = require('../models/Task');
 // Crear una tarea
 exports.createTask = async (req, res) => {
     try {
-        const { title, description, priority, categories, dueDate } = req.body;
+        const { title, description, priority, categories, category, dueDate, status, tags } = req.body;
         const user = req.user._id;
+        
+        // Manejar tanto 'category' (string) como 'categories' (array)
+        let taskCategories = [];
+        if (categories) {
+            taskCategories = Array.isArray(categories) ? categories : [categories];
+        } else if (category) {
+            taskCategories = [category];
+        }
+        
         const task = new Task({
             title,
             description,
-            priority,
-            categories,
+            priority: priority || 'media',
+            categories: taskCategories,
             dueDate,
+            status: status || 'pending',
             user
         });
+        
         await task.save();
         res.status(201).json({ success: true, task });
     } catch (error) {
@@ -53,7 +64,7 @@ exports.updateTask = async (req, res) => {
         const updates = req.body;
         
         // Campos permitidos para actualización
-        const allowedUpdates = ['title', 'description', 'priority', 'categories', 'dueDate', 'completed'];
+        const allowedUpdates = ['title', 'description', 'priority', 'categories', 'category', 'dueDate', 'completed', 'status', 'tags'];
         const actualUpdates = {};
         
         // Filtrar solo los campos permitidos
@@ -62,6 +73,12 @@ exports.updateTask = async (req, res) => {
                 actualUpdates[key] = updates[key];
             }
         });
+        
+        // Manejar tanto 'category' como 'categories'
+        if (updates.category && !updates.categories) {
+            actualUpdates.categories = [updates.category];
+            delete actualUpdates.category;
+        }
         
         // Validar que hay algo que actualizar
         if (Object.keys(actualUpdates).length === 0) {
