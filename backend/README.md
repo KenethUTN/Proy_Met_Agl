@@ -1,41 +1,45 @@
-# Task Manager - Backend
+# Tienda Ropa Backend
 
-Sistema de gestión de tareas personales desarrollado con Node.js y MongoDB.
+Este proyecto es una API REST para la gestión de una tienda de ropa, desarrollada con Node.js, Express y MongoDB.
 
-## Descripción
-
-Este proyecto permite a los usuarios gestionar sus tareas personales de manera eficiente, organizando actividades por prioridad, fechas límite y categorías para mejorar la productividad personal.
+## Características
+- Gestión de usuarios, productos, órdenes y compras
+- Autenticación con JWT
+- Encriptación de contraseñas con bcrypt
+- Documentación de la API en `API_Documentation.md`
 
 ## Instalación
+1. Clona el repositorio.
+2. Ve al directorio `backend`.
+3. Instala las dependencias:
+   ```powershell
+   npm install
+   ```
+4. Configura el archivo `.env` con tus variables de entorno (ver ejemplo abajo).
 
-1. Instala las dependencias:
-
-npm install express mongoose bcryptjs jsonwebtoken dotenv cors
-
-2. Configura las variables de entorno:
-
-Edita el archivo `.env` con tus configuraciones específicas.
-
-3. Inicia MongoDB en tu sistema local o asegúrate de tener acceso a una instancia remota.
+## Ejemplo de archivo `.env`
+```
+MONGO_URI=tu_url_de_mongodb
+JWT_SECRET=tu_secreto_jwt
+PORT=3000
+```
 
 ## Ejecución
+- Para iniciar el servidor:
+  ```powershell
+  npm start
+  ```
+- Para desarrollo con recarga automática:
+  ```powershell
+  npm run dev
+  ```
 
-# Desinstala Express 5 y sus lockfiles:
+## Estructura de carpetas
+- `controllers/`: Lógica de negocio y manejo de rutas
+- `models/`: Modelos de datos de MongoDB
+- `routes/`: Definición de rutas de la API
+- `middlewares/`: Middlewares personalizados
+- `utils/`: Utilidades varias
 
-npm uninstall express
-
-# Instala la versión estable:
-
-npm install express@4.18.2
-
-### Modo desarrollo:
-
-npm install --save-dev nodemon
-
-npm run dev
-
-El servidor se ejecutará en `http://localhost:3000` (o el puerto especificado en las variables de entorno).
-
-## API Endpoints
-
-https://documenter.getpostman.com/view/35354044/2sB3B7PZPk
+## Autor
+Equipo Met_Agiles_Proyecto_XP
